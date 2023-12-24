@@ -22,7 +22,7 @@ class UserService {
                 // Add other user properties as needed
             }.value
 
-            // Now, update the user with additional details
+            //Update the user with additional details
             updateUserDetails(userId, user)
         }
     }
