@@ -127,7 +127,6 @@ class UserService {
     private fun ResultRow.toUser(): User {
         return User(
             userId = this[Users.userId],
-            deviceType = this[Users.deviceType],
             emailAddress = this[Users.email],
             password = this[Users.password],
             age = this[Users.age],

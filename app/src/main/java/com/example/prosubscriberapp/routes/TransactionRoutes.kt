@@ -12,18 +12,21 @@ fun Route.transactionRoutes(transactionService: TransactionService) {
     route("/transactions") {
 
         // View transaction history
-        get("/{userId}") {
+        get("/") {
             val userId = call.parameters["userId"]?.toIntOrNull()
 
-            if (userId != null) {
+            if (userId != null && userId > 0) {
                 val transactionHistory = transactionService.getTransactionHistory(userId)
                 if (transactionHistory.isNotEmpty()) {
                     call.respond(transactionHistory)
                 } else {
-                    call.respond(HttpStatusCode.NotFound, "No transaction history found for the user")
+                    call.respond(
+                        HttpStatusCode.OK,
+                        mapOf("message" to "No transaction history found for the user")
+                    )
                 }
             } else {
-                call.respond(HttpStatusCode.BadRequest, "Invalid user ID")
+                call.respond(HttpStatusCode.BadRequest, "Invalid or missing user ID")
             }
         }
 

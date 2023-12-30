@@ -15,7 +15,6 @@ object Users : Table() {
     val name = varchar("name", 255)
     val location = varchar("location", 255)
     val gender = varchar("gender", 255)
-    val deviceType = varchar("device_type", 255)
     val gaid = varchar("gaid", 255)
 
     override val primaryKey = PrimaryKey(userId)
@@ -39,6 +38,16 @@ object Payments : Table() {
     val paymentMethod = varchar("payment_method", 20)
     val subid = integer("subid").references(Subscriptions.subId)
     val userid = integer("userid").references(Users.userId)
+
+    override val primaryKey = PrimaryKey(Subscriptions.subId, Subscriptions.userId, paymentDate)
+}
+
+object AppUsage : Table() {
+    val dateMeasured = timestamp("date_measured")
+    val subId = integer("subid").references(Subscriptions.subId)
+    val numHours = integer("num_hours").nullable()
+
+    override val primaryKey = PrimaryKey(dateMeasured,subId)
 }
 
 class DatabaseConfig {
@@ -52,7 +61,7 @@ class DatabaseConfig {
 
         transaction {
             // Auto-generate missing tables based on Exposed entities
-            SchemaUtils.create(Users, Subscriptions)
+            SchemaUtils.create(Users, Subscriptions,Payments,AppUsage)
         }
     }
 }
